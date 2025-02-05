@@ -4,8 +4,8 @@ from pathlib import Path
 from flask import Flask, jsonify, render_template
 
 # Define file paths
-csv_file_path = Path('../data/Border_Crossing_Entry_Data.csv')
-sqlite_db_path = Path('../sql/data.sqlite')
+csv_file_path = Path('static/data/Border_Crossing_Entry_Data.csv')
+sqlite_db_path = Path('static/sql/data.sqlite')
 
 # Read the CSV file into a pandas DataFrame
 df = pd.read_csv(csv_file_path)
@@ -31,13 +31,12 @@ print("The CSV file has been cleaned and successfully converted to an SQLite dat
 
 
 
-
 # Initialize Flask app
-app = Flask(__name__, template_folder='../../templates')
+app = Flask(__name__, static_folder='static', template_folder='templates')
 
 # Function to query the database
 def query_db(query, args=(), one=False):
-    con = sqlite3.connect('../sql/data.sqlite')
+    con = sqlite3.connect('static/sql/data.sqlite')
     cur = con.execute(query, args)
     rv = cur.fetchall()
     cur.close()
@@ -58,4 +57,3 @@ def get_data():
 # Run the Flask app
 if __name__ == '__main__':
     app.run(debug=True)
-

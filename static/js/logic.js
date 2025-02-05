@@ -1,5 +1,6 @@
+console.log("logic.js loaded successfully!");
 
-// GENERAL 
+// GENERAL
 
 document.addEventListener('DOMContentLoaded', function() {
     // Connection to Flask Server
@@ -7,25 +8,39 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             console.log(data);
+            populateDropdowns(data);
+            buildCharts(data, "", "");
         })
         .catch(error => console.error('Error:', error));
 });
 
+// BOX1
 
 
 
 
 
-// BOX3 
+
+
+
+
+// BOX2
 
 
 
 
 
-// BOX3 
 
 
 
 
 
-// BOX3 
+// BOX3
+
+
+
+
+
+
+
+
