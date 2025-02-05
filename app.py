@@ -12,7 +12,7 @@ df = pd.read_csv(csv_file_path)
 
 # Clean the data by converting 'Date' column to datetime, then extract 'Month' and 'Year'
 df['Date'] = pd.to_datetime(df['Date'], format='%b %Y')
-df['Month'] = df['Date'].dt.strftime('%B')  # Full month name
+df['Month'] = df['Date'].dt.strftime('%B')
 df['Year'] = df['Date'].dt.strftime('%Y')
 
 # Drop the 'Date' and 'Point' columns as they are no longer needed
