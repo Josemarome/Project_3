@@ -1,43 +1,53 @@
-import warnings
 import pandas as pd
 import sqlite3
 from pathlib import Path
+from flask import Flask, jsonify
 
-# Ignore warnings related to Decimal numbers
-warnings.filterwarnings('ignore')
-
-# Define the paths using pathlib
-base_dir = Path(__file__).resolve().parent.parent.parent
-csv_file_path = base_dir / 'static' / 'data' / 'Border_Crossing_Entry_Data.csv'
-sqlite_db_path = base_dir / 'static' / 'sql' / 'data.sqlite'
-
-# Ensure the directory for the SQLite database exists
-sqlite_db_path.parent.mkdir(parents=True, exist_ok=True)
-
-# Check if the CSV file exists
-if not csv_file_path.exists():
-    raise FileNotFoundError(f"Error: The file '{csv_file_path}' does not exist.")
+# Define file paths
+csv_file_path = Path('../data/Border_Crossing_Entry_Data.csv')
+sqlite_db_path = Path('../sql/data.sqlite')
 
 # Read the CSV file into a pandas DataFrame
 df = pd.read_csv(csv_file_path)
 
-# Check if 'Date' column exists
-if 'Date' not in df.columns:
-    raise KeyError("Error: 'Date' column not found in the CSV file.")
-
-# Data cleaning: Split the 'Date' column into 'Month' and 'Year', and remove the 'Point' column
+# Clean the data by converting 'Date' column to datetime, then extract 'Month' and 'Year'
 df['Date'] = pd.to_datetime(df['Date'], format='%b %Y')
-df['Month'] = df['Date'].dt.strftime('%B')  # Full name of the month
+df['Month'] = df['Date'].dt.strftime('%B')  # Full month name
 df['Year'] = df['Date'].dt.strftime('%Y')
+
+# Drop the 'Date' and 'Point' columns as they are no longer needed
 df = df.drop(columns=['Date', 'Point'])
 
-# Reorder columns to place 'Month' and 'Year' where 'Date' was
+# Reorder the columns to the desired order
 columns_order = ['Port Name', 'State', 'Port Code', 'Border', 'Month', 'Year', 'Measure', 'Value', 'Latitude', 'Longitude']
 df = df[columns_order]
 
-# Create a connection to a new SQLite database
+# Save the DataFrame to a SQLite database
 with sqlite3.connect(sqlite_db_path) as conn:
-    # Save the DataFrame to the SQLite database
-    df.to_sql('border_crossing_entry_data', conn, if_exists='replace', index=False)
+    df.to_sql('data', conn, if_exists='replace', index=False)
 
-print("CSV file cleaned and converted to SQLite database successfully.")
+print("The CSV file has been cleaned and successfully converted to an SQLite database.")
+
+
+
+
+# Flask server
+app = Flask(__name__)
+
+# Function to query the database
+def query_db(query, args=(), one=False):
+    con = sqlite3.connect('sql/data.sqlite')
+    cur = con.execute(query, args)
+    rv = cur.fetchall()
+    cur.close()
+    con.close()
+    return (rv[0] if rv else None) if one else rv
+
+# Route to get data from the database
+@app.route('/data', methods=['GET'])
+def get_data():
+    data = query_db('SELECT * FROM data')
+    return jsonify(data)
+
+if __name__ == '__main__':
+    app.run(debug=True)
