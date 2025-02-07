@@ -1,40 +1,53 @@
-body {
-    -webkit-text-size-adjust: 100%;
-    text-size-adjust: 100%;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
+/* Add borders and height for visualization */
+#title, #filters, #box0, #box1, #box2, #box3 {
+    border: 1px solid #ddd; 
+    margin-top: 20px;       
+    padding: 20px;          
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
 }
 
-.your-class {
-    text-align: -webkit-match-parent;
-    text-align: match-parent;
-    text-align: inherit;
-}
-
-#title, #filters, #box1, #box2, #box3 {
-    border: 1px solid #ddd;
-    min-height: 200px;
-    margin-top: 20px;
-    padding: 20px;
-}
-
+/* Ensure dropdowns are in a single row */
 #filters {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
+    display: flex;          
+    justify-content: center; 
+    gap: 20px;              
 }
 
-#box2 {
-    width: 100%;
-    height: 600px;
-    overflow: hidden;
-    padding: 20px;
-    box-sizing: border-box;
+/* Ensure charts are flexible and responsive */
+.chart-container {
+    width: 100%;  
+    height: 400px; /* Ensure consistent height for all charts */
 }
 
-select {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    text-align: inherit;
+.chart-container canvas {
+    width: 100% !important;  
+    height: auto !important; 
+}
+
+/* Container styling for flex layout */
+.container {
+    display: flex;         
+    flex-wrap: wrap;       
+    justify-content: space-around; 
+}
+
+/* Row styling for flex layout */
+.row {
+    display: flex;         
+    flex-wrap: wrap;       
+    justify-content: space-around; 
+}
+
+/* Column styling for 50% width elements */
+.col-md-6 {
+    flex: 0 0 48%;         
+    max-width: 48%;        
+    margin: 10px 0;        
+}
+
+/* Column styling for full width elements */
+.col-md-12 {
+    flex: 0 0 100%;        
+    max-width: 100%;       
+    margin: 10px 0;        
 }
