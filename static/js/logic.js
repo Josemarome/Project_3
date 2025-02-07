@@ -74,6 +74,7 @@ function populateDropdowns(samples) {
 
 
 
+
 // BOX2
 
 // Function to build charts based on selected year and month
@@ -151,6 +152,41 @@ function buildCharts(samples, selectedYear, selectedMonth) {
 
 
 // BOX3
+
+let myMap = L.map("map", {
+  center: [40.7, -94.5],
+  zoom: 3
+});
+
+// Adding the tile layer
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(myMap);
+
+
+
+d3.json(url).then(function(response) {
+
+  console.log(response);
+  features = response.features;
+
+  let heatArray = [];
+
+  for (let i = 0; i < features.length; i++) {
+    let location = features[i].geometry;
+    if (location) {
+      //console.log(location);
+      heatArray.push([location.coordinates[1], location.coordinates[0]]);
+    }
+
+  }
+
+  let heat = L.heatLayer(heatArray, {
+    radius: 20,
+    blur: 35
+  }).addTo(myMap);
+
+});
 
 
 
