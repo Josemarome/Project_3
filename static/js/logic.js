@@ -8,11 +8,12 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             populateDropdowns(data);  
-            // buildCharts(data, "", "");  
+
+            buildCharts(data, "", "");  
+
         })
         .catch(error => console.error('Error:', error));  
 });
-
 
 
 // Populate dropdowns with years and months from the data
@@ -71,14 +72,82 @@ function populateDropdowns(samples) {
 
 
 
+
+
+
 // BOX2
 
+// Function to build charts based on selected year and month
+function buildCharts(samples, selectedYear, selectedMonth) {
+    // Filter data based on the selected year and month
+    let filteredData = samples.filter(sample => {
+        let year = sample[5];
+        let month = sample[4];
 
+        return (selectedYear ? year === selectedYear : true) &&
+               (selectedMonth ? month === selectedMonth : true);
+    });
 
+    // Initialize the transportTypes object to aggregate data
+    let transportTypes = {};
 
+    // Process the data to aggregate by transport type
+    filteredData.forEach(sample => {
+        let transportType = sample[6];
+        let value = parseInt(sample[7]);
 
+        if (transportType && !isNaN(value)) {
+            if (transportTypes[transportType]) {
+                transportTypes[transportType] += value;
+            } else {
+                transportTypes[transportType] = value;
+            }
+        }
+    });
 
+    // Convert the transportTypes object into arrays for plotting
+    let transportTypeNames = Object.keys(transportTypes);
+    let transportTypeValues = Object.values(transportTypes);
 
+    // Sort the data by values in descending order
+    let sortedData = transportTypeNames.map((name, index) => {
+        return { name: name, value: transportTypeValues[index] };
+    }).sort((a, b) => b.value - a.value);
+
+    // Separate the sorted data into names and values arrays
+    transportTypeNames = sortedData.map(d => d.name);
+    transportTypeValues = sortedData.map(d => d.value);
+
+    // Ensure the largest values are at the top
+    transportTypeNames.reverse();
+    transportTypeValues.reverse();
+
+    // Build a Bar Chart with the processed data
+    let barData = [{
+        y: transportTypeNames,
+        x: transportTypeValues,
+        text: transportTypeNames,
+        type: "bar",
+        orientation: "h",
+    }];
+
+    // Adjust chart size to fit the container
+    let box2Element = document.getElementById('box2');
+    if (box2Element) {
+        let box2Width = box2Element.clientWidth;
+        let box2Height = box2Element.clientHeight;
+
+        let barLayout = {
+            title: "Total Border Crossings by Transport Type",
+            xaxis: { title: "Number of Crossings" },
+            yaxis: { title: "", showticklabels: true },
+            margin: { t: 50, l: 150, r: 50, b: 50 },
+            autosize: true
+        };
+
+        Plotly.newPlot("box2", barData, barLayout);  
+    }
+}
 
 
 
@@ -118,6 +187,7 @@ d3.json(url).then(function(response) {
   }).addTo(myMap);
 
 });
+
 
 
 
