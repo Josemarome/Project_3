@@ -8,11 +8,12 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             populateDropdowns(data);  
+
             buildCharts(data, "", "");  
+
         })
         .catch(error => console.error('Error:', error));  
 });
-
 
 
 // Populate dropdowns with years and months from the data
