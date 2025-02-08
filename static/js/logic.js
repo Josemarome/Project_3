@@ -344,7 +344,14 @@ resizeCharts();
 
 
 
-// BOX3 - Map Visualization (Assuming `url` is defined elsewhere in your code)
+
+
+// BOX3 - Map Visualization
+
+// Define the URL for the GeoJSON data
+const url = 'https://raw.githubusercontent.com/Josemarome/Project_3/main/static/json/geo_data.json';
+
+
 let myMap = L.map("map", {
     center: [40.7, -94.5],
     zoom: 3
@@ -355,28 +362,35 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(myMap);
 
+// Ensure Leaflet.heat plugin is included
+const heatLayerScript = document.createElement('script');
+heatLayerScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet.heat/0.2.0/leaflet-heat.js';
+document.head.appendChild(heatLayerScript);
+
+
 
 d3.json(url).then(function(response) {
     console.log(response);
-    features = response.features;
+    const features = response.features;
 
     let heatArray = [];
 
     for (let i = 0; i < features.length; i++) {
         let location = features[i].geometry;
-        if (location) {
+        if (location && location.coordinates && location.coordinates.length === 2) {
             heatArray.push([location.coordinates[1], location.coordinates[0]]);
         }
     }
 
-    let heat = L.heatLayer(heatArray, {
-        radius: 20,
-        blur: 35
-    }).addTo(myMap);
+    if (heatArray.length > 0) {
+        L.heatLayer(heatArray, {
+            radius: 20,
+            blur: 35
+        }).addTo(myMap);
+    } else {
+        console.warn('No valid locations found for heat map.');
+    }
+}).catch(error => {
+    console.error('Error loading GeoJSON data:', error);
 });
-
-
-
-
-
 
