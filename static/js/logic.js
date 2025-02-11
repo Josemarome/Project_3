@@ -121,6 +121,8 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Function to build a pie chart (box0)
+// ...existing code...
+
 function buildPieChart(samples, selectedYear = "") {
     // Filter the data based on the selected year
     let filteredData = samples.filter(sample => {
@@ -153,9 +155,9 @@ function buildPieChart(samples, selectedYear = "") {
     // Define colors for the pie chart
     let borderColors = borderNames.map(border => {
         if (border === 'Mexico') {
-            return '#006341';
+            return '#66b2b2'; // Color más claro para México
         } else if (border === 'Canada') {
-            return '#D80621';
+            return '#ff9999'; // Color más claro para Canadá
         } else {
             return '#cccccc';
         }
@@ -170,7 +172,7 @@ function buildPieChart(samples, selectedYear = "") {
             colors: borderColors,
             line: {
                 color: '#000000',
-                width: 1
+                width: 0.5 // Grosor más delgado para la línea
             }
         },
         textinfo: 'none', // No mostrar etiquetas dentro de la gráfica
@@ -193,9 +195,44 @@ function buildPieChart(samples, selectedYear = "") {
         }))
     };
 
+    // Calculate positions for the flag images
+    let flagImages = [];
+    let cumulativePercentage = 0;
+    borderNames.forEach((name, index) => {
+        let angle = cumulativePercentage + borderPercentages[index] / 2;
+        let radians = (angle / 100) * 2 * Math.PI;
+        let x = 0.5 + 0.3 * Math.cos(radians); // Adjust the 0.3 value to position the image correctly
+        let y = 0.5 + 0.3 * Math.sin(radians); // Adjust the 0.3 value to position the image correctly
+
+        let flagSource = '';
+        if (name === 'Mexico') {
+            flagSource = 'static/images/Flag_of_Canada.svg'; // Intercambia la bandera de México con la de Canadá
+        } else if (name === 'Canada') {
+            flagSource = 'static/images/Flag_of_Mexico.svg'; // Intercambia la bandera de Canadá con la de México
+        }
+
+        if (flagSource) {
+            flagImages.push({
+                source: flagSource,
+                x: x,
+                y: y,
+                sizex: 0.2,
+                sizey: 0.2,
+                xanchor: 'center',
+                yanchor: 'middle'
+            });
+        }
+
+        cumulativePercentage += borderPercentages[index];
+    });
+
+    pieLayout.images = flagImages;
+
     // Render the pie chart
     Plotly.newPlot("box0", pieData, pieLayout, {responsive: true});
 }
+
+// ...existing code...
 
 // Function to build a line chart (box1)
 function loadDataAndBuildSecondChart(samples, selectedYear = "") {
@@ -249,3 +286,4 @@ function loadDataAndBuildSecondChart(samples, selectedYear = "") {
 
     Plotly.newPlot("box1", lineData, lineLayout);
 }
+
