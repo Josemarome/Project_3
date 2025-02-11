@@ -95,7 +95,7 @@ python app.py
 Open your browser and go to:
 
 ```
-http://localhost:5000
+https://josemarome.github.io/Project_3/
 ```
 
 ### Interact with the Application
