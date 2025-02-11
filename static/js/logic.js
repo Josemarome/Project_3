@@ -19,6 +19,7 @@ function updateChartTitles(year) {
 // Function to initialize the map
 function initializeMap() {
     if (!map) {
+        // Create a new map instance with specific configurations
         map = new maplibregl.Map({
             container: 'box3',
             style: {
@@ -42,37 +43,88 @@ function initializeMap() {
                     }
                 ]
             },
-            center: [-95.7129, 39.8283], // Initial coordinates
-            zoom: 3 // Initial zoom level
+            center: [-95.7129, 39.8283],
+            zoom: 3
         });
 
+        // Add heatmap layer once the map is loaded
         map.on('load', () => {
             heatmapLayer = new deck.MapboxLayer({
                 id: 'heatmap',
                 type: deck.HeatmapLayer,
-                data: [], // Initialize with empty data
+                data: [],
                 getPosition: d => d.position,
                 getWeight: d => d.weight,
                 radiusPixels: 100
             });
             map.addLayer(heatmapLayer);
+
+            // Add zoom and border filter controls
+            addMapControls();
         });
     }
 }
 
+// Function to add controls to the map
+function addMapControls() {
+    // Create a container for the controls
+    const controlsContainer = document.createElement('div');
+    controlsContainer.className = 'mapboxgl-ctrl';
+
+    // Create the border filter select element
+    const borderFilter = document.createElement('select');
+    borderFilter.id = 'borderFilter';
+    borderFilter.innerHTML = `
+        <option value="">All</option>
+        <option value="Mexico">Mexico</option>
+        <option value="Canada">Canada</option>
+    `;
+    // Update the heatmap when the border filter changes
+    borderFilter.addEventListener('change', () => buildHeatMap(dataSamples));
+    controlsContainer.appendChild(borderFilter);
+
+    // Create the zoom control input element
+    const zoomControl = document.createElement('input');
+    zoomControl.type = 'range';
+    zoomControl.id = 'zoomControl';
+    zoomControl.min = '1';
+    zoomControl.max = '20';
+    zoomControl.step = '1';
+    zoomControl.value = map.getZoom();
+    // Update the map zoom level when the zoom control is adjusted
+    zoomControl.addEventListener('input', function() {
+        map.setZoom(parseInt(this.value));
+    });
+    controlsContainer.appendChild(zoomControl);
+
+    // Add the controls container to the map
+    map.getContainer().appendChild(controlsContainer);
+}
+
 // Function to update the heatmap data
 function buildHeatMap(samples) {
-    let heatmapData = samples.map(sample => ({
+    let borderFilter = document.getElementById('borderFilter').value;
+    // Filter the samples based on the selected border filter
+    let filteredSamples = samples.filter(sample => {
+        if (borderFilter) {
+            return sample['Border'].includes(borderFilter);
+        }
+        return true;
+    });
+
+    // Map the filtered samples to heatmap data format
+    let heatmapData = filteredSamples.map(sample => ({
         position: [parseFloat(sample['Longitude']), parseFloat(sample['Latitude'])],
         weight: parseInt(sample['Value'])
     }));
 
+    // Update the heatmap layer with the new data
     if (heatmapLayer) {
         heatmapLayer.setProps({ data: heatmapData });
     }
 }
 
-// Populate dropdowns with years from the data
+// Function to populate dropdowns with years from the data
 function populateDropdowns(samples) {
     // Extract years from the data
     let years = new Set(samples.map(sample => sample['Year']));
@@ -95,15 +147,15 @@ function populateDropdowns(samples) {
 // Function to update the charts and heatmap when the dropdown changes
 function updateCharts() {
     let selectedYear = d3.select("#yearDropdown").property("value");
-    updateChartTitles(selectedYear); // Add this line
+    updateChartTitles(selectedYear);
     buildPieChart(dataSamples, selectedYear);
     loadDataAndBuildSecondChart(dataSamples, selectedYear);
-    buildHeatMap(dataSamples); // Update heatmap data
+    buildHeatMap(dataSamples);
 }
 
 // Wait for the DOM content to be loaded before executing the following code
 document.addEventListener('DOMContentLoaded', function() {
-    initializeMap(); // Initialize the map
+    initializeMap();
 
     // Fetch data from JSON file
     fetch('static/json/data.json')
@@ -115,14 +167,12 @@ document.addEventListener('DOMContentLoaded', function() {
             buildPieChart(dataSamples, "");
             loadDataAndBuildSecondChart(dataSamples, "");
             buildHeatMap(dataSamples);
-            updateChartTitles(""); // Add this line
+            updateChartTitles("");
         })
         .catch(error => console.error('Error fetching JSON data:', error));
 });
 
 // Function to build a pie chart (box0)
-// ...existing code...
-
 function buildPieChart(samples, selectedYear = "") {
     // Filter the data based on the selected year
     let filteredData = samples.filter(sample => {
@@ -155,9 +205,9 @@ function buildPieChart(samples, selectedYear = "") {
     // Define colors for the pie chart
     let borderColors = borderNames.map(border => {
         if (border === 'Mexico') {
-            return '#66b2b2'; // Color más claro para México
+            return '#66b2b2';
         } else if (border === 'Canada') {
-            return '#ff9999'; // Color más claro para Canadá
+            return '#ff9999';
         } else {
             return '#cccccc';
         }
@@ -172,10 +222,10 @@ function buildPieChart(samples, selectedYear = "") {
             colors: borderColors,
             line: {
                 color: '#000000',
-                width: 0.5 // Grosor más delgado para la línea
+                width: 0.5
             }
         },
-        textinfo: 'none', // No mostrar etiquetas dentro de la gráfica
+        textinfo: 'none',
         hoverinfo: 'label+percent'
     }];
 
@@ -201,14 +251,14 @@ function buildPieChart(samples, selectedYear = "") {
     borderNames.forEach((name, index) => {
         let angle = cumulativePercentage + borderPercentages[index] / 2;
         let radians = (angle / 100) * 2 * Math.PI;
-        let x = 0.5 + 0.3 * Math.cos(radians); // Adjust the 0.3 value to position the image correctly
-        let y = 0.5 + 0.3 * Math.sin(radians); // Adjust the 0.3 value to position the image correctly
+        let x = 0.5 + 0.3 * Math.cos(radians);
+        let y = 0.5 + 0.3 * Math.sin(radians);
 
         let flagSource = '';
         if (name === 'Mexico') {
-            flagSource = 'static/images/Flag_of_Canada.svg'; // Intercambia la bandera de México con la de Canadá
+            flagSource = 'static/images/Flag_of_Canada.svg';
         } else if (name === 'Canada') {
-            flagSource = 'static/images/Flag_of_Mexico.svg'; // Intercambia la bandera de Canadá con la de México
+            flagSource = 'static/images/Flag_of_Mexico.svg';
         }
 
         if (flagSource) {
@@ -232,15 +282,15 @@ function buildPieChart(samples, selectedYear = "") {
     Plotly.newPlot("box0", pieData, pieLayout, {responsive: true});
 }
 
-// ...existing code...
-
 // Function to build a line chart (box1)
 function loadDataAndBuildSecondChart(samples, selectedYear = "") {
     let filteredData = samples;
     let xValues = [];
     let yValues = [];
 
+    // Check if a specific year is selected or not
     if (selectedYear === "") {
+        // Process data by years
         let years = [...new Set(samples.map(sample => sample['Year']))];
         years.sort((a, b) => a - b);
         
@@ -250,6 +300,7 @@ function loadDataAndBuildSecondChart(samples, selectedYear = "") {
             return yearlyData.reduce((sum, sample) => sum + parseInt(sample['Value']), 0);
         });
     } else {
+        // Process data by months for the selected year
         filteredData = samples.filter(sample => sample['Year'] === selectedYear);
         let months = [...new Set(filteredData.map(sample => sample['Month']))];
         months.sort((a, b) => monthNames.indexOf(a) - monthNames.indexOf(b));
@@ -261,6 +312,7 @@ function loadDataAndBuildSecondChart(samples, selectedYear = "") {
         });
     }
 
+    // Prepare data and layout for the line chart
     let lineData = [{
         x: xValues,
         y: yValues,
@@ -284,6 +336,6 @@ function loadDataAndBuildSecondChart(samples, selectedYear = "") {
         width: document.getElementById('box1').clientWidth - 40
     };
 
+    // Render the line chart
     Plotly.newPlot("box1", lineData, lineLayout);
 }
-
