@@ -1,33 +1,32 @@
-/* Body */
+/* Body Styles */
 body {
     background-color: #E9EFEC;
     font-family: Arial, sans-serif;
     color: #343a40;
 }
 
-/* Container */
+/* Container Styles */
 .container {
     margin-top: 20px;
 }
 
-/* Title Section */
+/* Title Section Styles */
 .col-md-12.p-3.text-center.bg-light {
-    margin: 0 auto;  /* Center the container horizontally */
-    padding: 10px;  /* Reduce padding */
-    border: 1px solid #6A9C89;  /* Add a border */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);  /* Add a shadow for depth */
-    border-radius: 5px;  /* Add rounded corners */
-    background-color: #ffffff;  /* Set background color */
-    text-align: center;  /* Center the text */
+    margin: 0 auto;
+    padding: 10px;
+    border: 1px solid #6A9C89;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    background-color: #ffffff;
+    text-align: center;
 }
 
-/* Flexbox to align box0 and box1 in the same row */
+/* Flexbox for Alignment */
 .row.d-flex {
     display: flex;
-    align-items: stretch;  /* Ensure children stretch to share height */
+    align-items: stretch;
 }
 
-/* Flexbox to align content in columns */
 .col-md-4.d-flex {
     display: flex;
     flex-direction: column;
@@ -42,57 +41,104 @@ body {
     flex: 0 0 auto;
 }
 
-/* Adjust card bodies to share the same height */
+/* Card Body Styles */
 .card-body {
     display: flex;
     flex-direction: column;
     height: 100%;
-    justify-content: center;  /* Center content vertically */
-    align-items: center;  /* Center content horizontally */
+    justify-content: center;
+    align-items: center;
 }
 
-/* Specific adjustments for the map */
-#box3 {
-    height: 500px;  /* Adjust map height */
-    margin-bottom: 40px;  /* Increase bottom margin */
+/* Standard Box Styles */
+.standard-box {
+    border: 1px solid #6A9C89;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    background-color: #ffffff;
 }
 
-/* Specific adjustments for the filter */
-.card.card-body.bg-light {
-    height: auto;  /* Adjust filter height */
-    margin-bottom: 10px;  /* Add bottom margin */
-    padding: 5px; /* Reduce padding */
+/* Chart Container Styles */
+.chart-container {
+    border: 1px solid #6A9C89;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: #ffffff;
 }
 
-.card.card-body.bg-light h6 {
-    font-size: 0.8rem; /* Reduce font size */
+/* Chart Title Styles */
+.chart-title {
+    padding: 5px;
+    text-align: center;
+    font-weight: bold;
+    height: 25px;
 }
 
-.card.card-body.bg-light select {
-    font-size: 0.8rem; /* Reduce font size */
-}
-
-/* Specific adjustments for the pie chart */
-.card.card-primary {
-    flex-grow: 1;  /* Allow the pie chart to take up remaining space */
-    height: 100%;  /* Ensure the pie chart takes up full height */
-}
-
+/* Specific Adjustments for box0 */
 #box0 {
     width: 100%;
     height: 100%;
     position: relative;
-    padding: 10px; /* Add padding to adjust the chart within the container */
+    height: 400px;
 }
 
-/* Adjust height of box0 and box1 */
-#box0, #box1 {
-    height: 400px; /* Adjust height */
-}
-
-/* Adjust title font size for pie chart */
 #box0 .plotly .title {
-    font-size: 12px; /* Adjust font size */
-    white-space: pre-wrap; /* Allow title to wrap to multiple lines */
-    text-align: center; /* Center the title */
+    font-size: 12px;
+    white-space: pre-wrap;
+    text-align: center;
+}
+
+/* Specific Adjustments for box1 */
+#box1 {
+    width: 100%;
+    height: 400px;
+    position: relative;
+    border: 1px solid #6A9C89; 
+    border-radius: 5px; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+    padding: 10px; 
+    background-color: #ffffff;
+}
+
+/* Specific Adjustments for box3 */
+#box3 {
+    width: 100%;
+    height: 500px;
+    position: relative;
+}
+
+/* Specific Adjustments for the Filter Section */
+.card.card-body.bg-light {
+    height: auto;
+    padding: 5px;
+}
+
+.card.card-body.bg-light h6 {
+    font-size: 0.8rem;
+}
+
+.card.card-body.bg-light select {
+    font-size: 0.8rem;
+}
+
+/* Card Primary Styles */
+.card.card-primary {
+    flex-grow: 1;
+    height: 100%;
+}
+
+/* Ensure Margins for Titles and Charts */
+.chart-container {
+    margin-bottom: 20px;
+}
+
+.chart-title + .standard-box {
+    margin-top: 10px;
+}
+
+
+/* Row Styles for the Map */
+.row.mb-5 {
+    margin-top: -40px;
 }
