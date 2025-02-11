@@ -1,53 +1,98 @@
-/* Add borders and height for visualization */
-#title, #filters, #box0, #box1, #box2, #box3 {
-    border: 1px solid #ddd; 
-    margin-top: 20px;       
-    padding: 20px;          
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+/* Body */
+body {
+    background-color: #E9EFEC;
+    font-family: Arial, sans-serif;
+    color: #343a40;
 }
 
-/* Ensure dropdowns are in a single row */
-#filters {
-    display: flex;          
-    justify-content: center; 
-    gap: 20px;              
-}
-
-/* Ensure charts are flexible and responsive */
-.chart-container {
-    width: 100%;  
-    height: 400px; /* Ensure consistent height for all charts */
-}
-
-.chart-container canvas {
-    width: 100% !important;  
-    height: auto !important; 
-}
-
-/* Container styling for flex layout */
+/* Container */
 .container {
-    display: flex;         
-    flex-wrap: wrap;       
-    justify-content: space-around; 
+    margin-top: 20px;
 }
 
-/* Row styling for flex layout */
-.row {
-    display: flex;         
-    flex-wrap: wrap;       
-    justify-content: space-around; 
+/* Title Section */
+.col-md-12.p-3.text-center.bg-light {
+    margin: 0 auto;  /* Center the container horizontally */
+    padding: 10px;  /* Reduce padding */
+    border: 1px solid #6A9C89;  /* Add a border */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);  /* Add a shadow for depth */
+    border-radius: 5px;  /* Add rounded corners */
+    background-color: #ffffff;  /* Set background color */
+    text-align: center;  /* Center the text */
 }
 
-/* Column styling for 50% width elements */
-.col-md-6 {
-    flex: 0 0 48%;         
-    max-width: 48%;        
-    margin: 10px 0;        
+/* Flexbox to align box0 and box1 in the same row */
+.row.d-flex {
+    display: flex;
+    align-items: stretch;  /* Ensure children stretch to share height */
 }
 
-/* Column styling for full width elements */
-.col-md-12 {
-    flex: 0 0 100%;        
-    max-width: 100%;       
-    margin: 10px 0;        
+/* Flexbox to align content in columns */
+.col-md-4.d-flex {
+    display: flex;
+    flex-direction: column;
+}
+
+.col-md-8.d-flex, .card.card-primary.flex-grow-1 {
+    display: flex;
+    flex-grow: 1;
+}
+
+.card.card-body.bg-light.mb-3 {
+    flex: 0 0 auto;
+}
+
+/* Adjust card bodies to share the same height */
+.card-body {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;  /* Center content vertically */
+    align-items: center;  /* Center content horizontally */
+}
+
+/* Specific adjustments for the map */
+#box3 {
+    height: 500px;  /* Adjust map height */
+    margin-bottom: 40px;  /* Increase bottom margin */
+}
+
+/* Specific adjustments for the filter */
+.card.card-body.bg-light {
+    height: auto;  /* Adjust filter height */
+    margin-bottom: 10px;  /* Add bottom margin */
+    padding: 5px; /* Reduce padding */
+}
+
+.card.card-body.bg-light h6 {
+    font-size: 0.8rem; /* Reduce font size */
+}
+
+.card.card-body.bg-light select {
+    font-size: 0.8rem; /* Reduce font size */
+}
+
+/* Specific adjustments for the pie chart */
+.card.card-primary {
+    flex-grow: 1;  /* Allow the pie chart to take up remaining space */
+    height: 100%;  /* Ensure the pie chart takes up full height */
+}
+
+#box0 {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    padding: 10px; /* Add padding to adjust the chart within the container */
+}
+
+/* Adjust height of box0 and box1 */
+#box0, #box1 {
+    height: 400px; /* Adjust height */
+}
+
+/* Adjust title font size for pie chart */
+#box0 .plotly .title {
+    font-size: 12px; /* Adjust font size */
+    white-space: pre-wrap; /* Allow title to wrap to multiple lines */
+    text-align: center; /* Center the title */
 }

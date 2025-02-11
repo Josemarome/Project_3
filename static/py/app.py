@@ -16,6 +16,10 @@ df['Date'] = pd.to_datetime(df['Date'], format='%b %Y')
 df['Month'] = df['Date'].dt.strftime('%B')
 df['Year'] = df['Date'].dt.strftime('%Y')
 
+# Extract latitude and longitude from the 'Point' column
+df['Longitude'] = df['Point'].apply(lambda x: float(x.split(' ')[1][1:]))
+df['Latitude'] = df['Point'].apply(lambda x: float(x.split(' ')[2][:-1]))
+
 # Drop the 'Date' and 'Point' columns as they are no longer needed
 df = df.drop(columns=['Date', 'Point'])
 
