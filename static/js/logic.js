@@ -15,7 +15,27 @@ function initializeMap() {
     if (!map) {
         map = new maplibregl.Map({
             container: 'box3',
-            style: 'https://tiles.stadiamaps.com/styles/alidade_smooth.json', // Map style
+            style: {
+                version: 8,
+                sources: {
+                    "osm-tiles": {
+                        type: "raster",
+                        tiles: [
+                            "https://a.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                            "https://b.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                            "https://c.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        ],
+                        tileSize: 256
+                    }
+                },
+                layers: [
+                    {
+                        id: "osm-tiles",
+                        type: "raster",
+                        source: "osm-tiles"
+                    }
+                ]
+            },
             center: [-95.7129, 39.8283], // Initial coordinates
             zoom: 3 // Initial zoom level
         });
