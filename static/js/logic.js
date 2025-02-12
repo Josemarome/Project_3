@@ -12,9 +12,15 @@ const monthNames = [
 
 // Function to update chart titles based on the selected year
 function updateChartTitles(year) {
-    document.getElementById('title0').innerText = `% Border Crossings by Country (${year})`;
-    document.getElementById('title1').innerText = `Monthly Border Crossings in ${year}`;
+    if (year === "") {
+        document.getElementById('title0').innerText = '% of Historical Border Crossings by Country';
+        document.getElementById('title1').innerText = 'Number of Historical Border Crossings';
+    } else {
+        document.getElementById('title0').innerText = `% of Border Crossings by Country (${year})`;
+        document.getElementById('title1').innerText = `Border Crossings by Month in ${year}`;
+    }
 }
+
 
 // Function to initialize the map
 function initializeMap() {
@@ -161,7 +167,7 @@ document.addEventListener('DOMContentLoaded', function() {
     fetch('static/json/data.json')
         .then(response => response.json())
         .then(data => {
-            dataSamples = data; // Assign data to global variable
+            dataSamples = data;
             // Initialize dropdowns and charts with the fetched data
             populateDropdowns(dataSamples);
             buildPieChart(dataSamples, "");
@@ -216,70 +222,56 @@ function buildPieChart(samples, selectedYear = "") {
     // Prepare data and layout for the pie chart
     let pieData = [{
         values: borderPercentages,
-        labels: borderNames,
+        labels: borderPercentages.map(p => `<b>${p.toFixed(2)}%</b>`),
         type: 'pie',
+        textinfo: 'label',
+        hoverinfo: 'label+percent',
         marker: {
             colors: borderColors,
             line: {
                 color: '#000000',
                 width: 0.5
             }
-        },
-        textinfo: 'none',
-        hoverinfo: 'label+percent'
+        }
     }];
 
     let pieLayout = {
         showlegend: false,
         autosize: true,
-        margin: { l: 40, r: 40, b: 80, t: 40 },
-        height: document.getElementById('box0').clientHeight - 40,
-        width: document.getElementById('box0').clientWidth - 40,
-        annotations: borderNames.map((name, index) => ({
-            x: 0.5,
-            y: -0.2 - index * 0.1,
-            xref: 'paper',
-            yref: 'paper',
-            text: `${name}: ${borderPercentages[index].toFixed(2)}%`,
-            showarrow: false
-        }))
+        margin: { l: 5, r: 5, b: 5, t: 5 },
+        height: document.getElementById('box0').clientHeight - 80,
+        width: document.getElementById('box0').clientWidth - 80
     };
-
-    // Calculate positions for the flag images
-    let flagImages = [];
-    let cumulativePercentage = 0;
-    borderNames.forEach((name, index) => {
-        let angle = cumulativePercentage + borderPercentages[index] / 2;
-        let radians = (angle / 100) * 2 * Math.PI;
-        let x = 0.5 + 0.3 * Math.cos(radians);
-        let y = 0.5 + 0.3 * Math.sin(radians);
-
-        let flagSource = '';
-        if (name === 'Mexico') {
-            flagSource = 'static/images/Flag_of_Canada.svg';
-        } else if (name === 'Canada') {
-            flagSource = 'static/images/Flag_of_Mexico.svg';
-        }
-
-        if (flagSource) {
-            flagImages.push({
-                source: flagSource,
-                x: x,
-                y: y,
-                sizex: 0.2,
-                sizey: 0.2,
-                xanchor: 'center',
-                yanchor: 'middle'
-            });
-        }
-
-        cumulativePercentage += borderPercentages[index];
-    });
-
-    pieLayout.images = flagImages;
 
     // Render the pie chart
     Plotly.newPlot("box0", pieData, pieLayout, {responsive: true});
+
+    // Render flags and color boxes in a separate container
+    let flagContainer = document.getElementById('flag-container');
+    flagContainer.innerHTML = '';
+    borderNames.forEach((name, index) => {
+        let flagSource = '';
+        if (name === 'Mexico') {
+            flagSource = 'static/images/Flag_of_Mexico.svg';
+        } else if (name === 'Canada') {
+            flagSource = 'static/images/Flag_of_Canada.svg';
+        }
+
+        if (flagSource) {
+            let flagElement = document.createElement('div');
+            flagElement.style.flex = '1';
+            flagElement.style.display = 'flex';
+            flagElement.style.alignItems = 'center';
+            flagElement.style.justifyContent = 'center';
+            flagElement.innerHTML = `
+                <div style="display: flex; align-items: center;">
+                    <div style="width: 20px; height: 20px; background-color: ${borderColors[index]}; margin-right: 8px;"></div>
+                    <img src="${flagSource}" width="60" height="36">
+                </div>
+            `; // Adjust flag size and add color box
+            flagContainer.appendChild(flagElement);
+        }
+    });
 }
 
 // Function to build a line chart (box1)

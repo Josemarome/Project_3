@@ -39,31 +39,3 @@ with sqlite3.connect(sqlite_db_path) as conn:
     df.to_json(json_file_path, orient='records')
 
 print("The SQLite database has been converted to a JSON file.")
-
-
-# # Initialize Flask app
-# app = Flask(__name__, static_folder='static', template_folder='templates')
-
-# # Function to query the database
-# def query_db(query, args=(), one=False):
-#     con = sqlite3.connect('static/sql/data.sqlite')
-#     cur = con.execute(query, args)
-#     rv = cur.fetchall()
-#     cur.close()
-#     con.close()
-#     return (rv[0] if rv else None) if one else rv
-
-# # Route to serve the index.html file
-# @app.route('/')
-# def index():
-#     return render_template('index.html')
-
-# # Route to get data from the database
-# @app.route('/data', methods=['GET'])
-# def get_data():
-#     data = query_db('SELECT * FROM data')
-#     return jsonify(data)
-
-# # Run the Flask app
-# if __name__ == '__main__':
-#     app.run(debug=True)
