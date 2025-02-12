@@ -1,133 +1,98 @@
-## Border Crossing Data Visualization Project
+# Border Crossing Data Visualization Project
 
-## Project Overview
+## Summary
+The project aims to analyze border crossing trends between Mexico, the United States, and Canada, assessing their evolution over time. The main objective is to identify the states and provinces where these crossings are concentrated. Through interactive visualizations, users will gain a clear understanding of these crossing dynamics, which will help in decision-making regarding public policy and management of border operations. This analysis will allow for a comprehensive assessment of border interactions in North America, providing a solid foundation for improving cooperation and security among the three countries.
 
-This project aims to analyze border crossing trends between Mexico and the United States, evaluating their evolution over time. The goal is to identify the states where these crossings are concentrated and the most common transportation methods used to travel to the U.S. Through interactive visualizations, users will gain a clear understanding of these crossing dynamics, aiding decision-making in public policy and border operations management.
+## Objectives
+- Provide clear and understandable visualizations of the dynamics of border crossings between Mexico, the U.S., and Canada.
+- Help optimize border operations and improve policy-level decision-making.
+- Implement interactive filtering by year to explore different time periods.
 
----
-## Objectives and Methodology
+## Data Description
+The dataset includes:
+- **Border_Crossing_Entry_Data.csv**: Contains historical data of border crossings, including port names, states, port codes, crossing methods (e.g., personal vehicles, trucks, buses), and geographic coordinates. The dataset can be accessed from the [U.S. Government's Data Catalog](https://catalog.data.gov/dataset/border-crossing-entry-data-683ae).
 
-### Objective
+## Included Scripts
 
-To provide clear, understandable visualizations of border crossing dynamics between Mexico and the U.S., helping optimize border operations and improve decision-making at the policy level.
+1. **index.html**:
+   - Structures the webpage and defines where the charts and metadata information are displayed.
+   - Includes references to the necessary libraries for visualization.
 
-### Methodology
+2. **style.css**:
+   - Contains CSS styles for formatting HTML pages and interactive visualizations.
+   - Ensures a clean and responsive design.
 
-- Analyzing historical data through visualization techniques such as line charts, heatmaps, and pie charts.
-- Implementing interactive filtering by year and month to explore different time periods.
-- Using technologies like:
-  - **Python** (Flask, Pandas, SQLite) for backend services.
-  - **JavaScript** (Plotly, D3.js, MapLibre, Deck.gl) for data visualization and interactive maps.
+3. **logic.js**:
+   - Manages interactive charts and user interactions.
+   - Loads data from a JSON file.
+   - Creates pie charts, line charts, and heatmap.
+   - Allows users to filter data by year using drop-down menus.
+   - Integrates various external libraries for visualization and interactivity.
 
----
+4. **app.py**:
+   - Reads data from `Border_Crossing_Entry_Data.csv`.
+   - Cleans and converts the data to JSON.
+   - Stores data in an SQLite database.
+   - Powers visualizations and is set up for potential web integration.
 
-## Project Files and Structure
+## Requirements
+- Python 3.x
+- Pandas
+- SQLite
 
-### Backend
+## Instructions
 
-- **`app.py`**: Contains the backend code using Flask to manage the data. It:
-  - Reads data from a CSV file (`Border_Crossing_Entry_Data.csv`).
-  - Cleans and converts the data to JSON.
-  - Stores data in an SQLite database.
-  - Powers visualizations and is set up for potential web integration.
+### Getting Started
+1. Ensure you have Python 3.x installed. Install necessary dependencies with:
+   ```sh
+   pip install pandas sqlite3
+   ```
 
-### Frontend
-
-- **`style.css`**: Contains CSS styles for formatting HTML pages and interactive visualizations. It ensures a clean and responsive design.
-- **`logic.js`**: Manages interactive charts and user interactions. It:
-  - Loads data from a JSON file.
-  - Creates pie, line, and other interactive charts.
-  - Allows users to filter data by year and month using dropdown menus.
-  - Integrates various external libraries for visualization and interactivity.
-
-### Data
-
-- **`Border_Crossing_Entry_Data.csv`**: Contains historical data of border crossings, including:
-  - Port names, states, and port codes.
-  - Crossing methods (e.g., personal vehicles, trucks, buses).
-  - Geographic coordinates.
-- **`data.sqlite`**: An SQLite database containing the cleaned version of the CSV data. It enables dynamic queries for user filters.
-
----
-
-## Visualizations
-
-The project includes three main visualizations:
-
-1. **Line Chart (Total Crossings by Year and Month)**
-   - Displays the evolution of border crossings over time, revealing trends and patterns.
-2. **Pie Chart (Proportion of Crossings by Country)**
-   - Represents the proportion of border crossings involving the United States, Canada, and Mexico.
-3. **Heatmap (Geographic Distribution of Border Crossings)**
-   - Displays the density of border crossings based on geographic distribution.
+2. Navigate to the project directory and execute:
+   ```sh
+   python app.py
+   ```
 
 ---
 
+## Features
+- **Dropdown Menus**: Filter data by year.
+- **Line Chart**: Displays the evolution of border crossings over time.
+- **Pie Chart**: Represents the proportion of border crossings involving the United States, Canada, and Mexico.
+- **Heatmap**: Displays the density of border crossings based on geographic distribution.
+
+## Deployment
+The application is deployed on GitHub Pages. You can access it [here](https://josemarome.github.io/Project_3/).
 
 ## Ethical Considerations
-
 - The project uses publicly available data on border crossings.
 - All data used is anonymous and does not contain personally identifiable information.
 - The visualizations aim to be accessible and understandable for a wide audience, promoting fair and ethical data analysis.
 
----
-
-## How to Use
-
-### Prerequisites
-
-Ensure you have Python 3.x installed. Install necessary dependencies with:
-
-```sh
-pip install flask pandas sqlite3
-```
-
-### Run the Server
-
-Navigate to the project directory and execute:
-
-```sh
-python app.py
-```
-
-### Access the Application
-
-Open your browser and go to:
-
-```
-https://josemarome.github.io/Project_3/
-```
-
-### Interact with the Application
-
-- Use the dropdown menus to filter data by year and month.
-- Click on the charts to see more details about border crossings.
-
----
-
 ## Data Sources
-
-The border crossing data is sourced from historical records provided by official U.S. and Mexican agencies.
-
----
+The border crossing data comes from historical records provided by official US government agencies. The dataset can be accessed from the [U.S. Government's Data Catalog](https://catalog.data.gov/dataset/border-crossing-entry-data-683ae).
 
 ## Code References
-
 - **Plotly**: For creating interactive charts in JavaScript.
-- **Flask**: A web framework used for the backend of the application.
 - **D3.js**: For data manipulation and visualization.
 - **MapLibre**: For interactive mapping and geospatial visualization.
 - **Deck.gl**: For high-performance web-based geospatial visualization.
 
-### External Libraries Used
-
+## External Libraries Used
 The following libraries are included via CDN for enhanced functionality:
+- [MapLibre GL CSS](https://unpkg.com/maplibre-gl@1.15.2/dist/maplibre-gl.css)
+- [MapLibre GL Geocoder CSS](https://unpkg.com/@maplibre/maplibre-gl-geocoder@1.1.0/dist/maplibre-gl-geocoder.css)
+- [MapLibre GL JS](https://unpkg.com/maplibre-gl@1.15.2/dist/maplibre-gl.js)
+- [MapLibre GL Geocoder JS](https://unpkg.com/@maplibre/maplibre-gl-geocoder@1.1.0/dist/maplibre-gl-geocoder.min.js)
+- [Deck.gl](https://unpkg.com/deck.gl@8.6.0/dist.min.js)
+- [Plotly](https://cdn.plot.ly/plotly-latest.min.js)
+- [D3.js](https://d3js.org/d3.v7.min.js)
 
-- **MapLibre GL CSS**: [MapLibre GL Styles](https://unpkg.com/maplibre-gl@1.15.2/dist/maplibre-gl.css)
-- **MapLibre GL Geocoder CSS**: [MapLibre Geocoder Styles](https://unpkg.com/@maplibre/maplibre-gl-geocoder@1.1.0/dist/maplibre-gl-geocoder.css)
-- **MapLibre GL JS**: [MapLibre Library](https://unpkg.com/maplibre-gl@1.15.2/dist/maplibre-gl.js)
-- **MapLibre GL Geocoder JS**: [MapLibre Geocoder Library](https://unpkg.com/@maplibre/maplibre-gl-geocoder@1.1.0/dist/maplibre-gl-geocoder.min.js)
-- **Deck.gl**: [Deck.gl Library](https://unpkg.com/deck.gl@8.6.0/dist.min.js)
-- **Plotly**: [Plotly Library](https://cdn.plot.ly/plotly-latest.min.js)
-- **D3.js**: [D3.js Library](https://d3js.org/d3.v7.min.js)
+## Contributions
 
+We welcome and appreciate contributions from the community. If you have suggestions or improvements, please open an issue or submit a pull request.
+
+**Special Thanks To:**
+- [Monse](https://github.com/Monse2604): For their valuable insights on data visualization.
+- [Jose](https://github.com/Josemarome): For their assistance with data cleaning and preprocessing.
+- [Fco](https://github.com/fjdpr): For their contributions to the backend development.
